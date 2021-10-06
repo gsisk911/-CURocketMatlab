@@ -1,95 +1,67 @@
 %% Rocket Simulation
 %This script is a quick & dirty simulation of a rocket model
+restoredefaultpath; %to delete all added paths and avoid unnecessary conflicts with data
 clc; close all; clear all;
-ft2m = 0.3048; %feet to meters
-in2m = 0.0254; %inch to meter
-lb2kg = 0.45359237; %pound to kilogram
-deg2rad = pi/180; %degree to rad
-T_s = 0.01; %sample time
 
-%% considering certain parameters
+rocket_no = 2; %choose the rocket to test
+
+addpath([pwd, '\CodeBits']); %adds in the folder with necessary functions etc
+addpath([pwd, '\Plotting']); %adds in the folder with necessary functions etc
+addpath([pwd, '\Rockets', '\Rocket',num2str(rocket_no)]); %adds in the folder with necessary functions etc
+
+
+%% Simulation Parameters & Choices
+
+T_s = 0.01; %sample time
 flag_D = 1; %consider drag - 0: no, 1: yes with interpolation of data, 2: yes with analytical data
-flag_AA = 0; %conider active aero - 0: no, 1: yes
+flag_analytical = 0; %if set, than drag is calculated analytical, else a RAS Aero File is loaded in
+flag_AA = 0; %consider active aero - 0: no, 1: yes
+flag_plotting = 1; %if you want to see plots in the end
+metric = 1; %if plotting is to be in metric units, 0 for imperial
+
 
 %% Variables
-%load test data
-load('Testflight_data.mat');
+% Call several scripts
 
-% mission parameters:
-apogee_d = 30000 * ft2m; %desired apogee in m
-
-% Rocket parameters
-m_0 = 74 * lb2kg; %zero mass of rocket m_0 = m_PL + m_S + m_P;
-m_P = 11.272; % Propulsionmass at t0
-t_BO = 6.3; %Burnout in seconds
-%m_dot = m_P/t_BO; %average massflow in kg/s
-launch_angle = 0; % in degrees
-theta_0 = (90-launch_angle) *deg2rad; % angle of rocket to ground
-
-    %rocket body
-    d = 6*in2m;
-    l = 98*in2m;
-    C_DR = data_mat(:,6); %from simulation
-    t_data = data_mat(:,1); %time from simulation
-    
-    %fins
-    n_f = 4;
-    t_f = 0.25*in2m;
-    span_f = 5.75*in2m;
-    tip_chord = 3.8333*in2m;
-    d_sweep = 9.2*in2m;
-    d_tubebase = 11.5*in2m;
-    d_protuberance = 0.5*in2m;
-    h_protuberance = 0.5*in2m;
-    
-    % Area of attack
-    A_R = calcRocketArea(d/2,n_f,t_f,span_f);
-    
-    %active aero - consider trapezoidal shap of fins    
-    n_finAA = 4; %for total fins
-    t_finAA = 0.25*in2m;
-    span_finAA = 2*in2m;
-    l_botAA = 2*in2m;
-    l_topAA = 1*in2m;
-    if(flag_AA)
-        A_AAsmall = t_finAA * span_finAA;
-        A_AAbig = span_finAA * (l_botAA + l_topAA)/2; %trapezoidal!!
-    else
-        A_AAsmall = 0;
-        A_AAbig = 0;
-    end
-    C_DAA = 1; %Coefficient of drag, random estimate
-    phi_0 = 0;
-    phi_const = 90*deg2rad;
-    
+Conversions %for different types of conversions like feet to meter
+Environment %loads environmental data like air density
+Rocket_Data %loads the specific rocket data as specified in Rockets/Rocket+"rocket_no"
 
 
-% environmental parameters
-    % air density model based on CIRA-72, below 25km
-    rho_0 = 1.225; %kg/m^3, density at sea level
-    H_0 = 7249000; %m, scale height below 10km, earth radius
-    h_0 = 0; %starting height
-    R_E = 6378136; %radius of the earth in meter
-    g_0 = 9.798; %m/s^2, gravity acceleration parameter
-    
-    
-    
 %% Run simulation
-%without AA drag
-flag_AA = 0;
-out_wo = sim('RocketSim');
-h_wo = out_wo.SimData.pos.Data(:,2);
-F_D_wo = out_wo.SimData.F_D.Data(:,1);
-t_wo = out_wo.SimData.pos.Time(:,1);
 
-%with AA drag
-flag_AA = 1;
-A_AAsmall = t_finAA * span_finAA;
-A_AAbig = span_finAA * (l_botAA + l_topAA)/2; %trapezoidal!!
-out_AA = sim('RocketSim');
-h_AA = out_AA.SimData.pos.Data(:,2);
-F_D_AA = out_AA.SimData.F_D.Data(:,1);
-t_AA = out_AA.SimData.pos.Time(:,1);
+out = sim('RocketSim');
+h = out.SimData.pos.Data(:,2);
+t = out.SimData.pos.Time(:,1);
+v = out.SimData.v.Data(:,1:2);
+v_abs = sqrt(v(:,1).^2+v(:,2).^2);
+a = out.SimData.a.Data(:,1:2);
+a_abs = sqrt(a(:,1).^2+a(:,2).^2);
+F_D = out.SimData.F_D.Data(:,1);
+C_D = out.SimData.C_D.Data(:,1);
+t2 = out.SimData.C_D.Time(:,1);
+m = out.SimData.m.Data(:,1);
+F_T = out.SimData.thrust.Data(:,1); %along rocket
 
-plot_apogee(h_wo,h_AA,t_wo,t_AA,1);
-plot_FD(F_D_wo,F_D_AA,t_wo,t_AA);
+%% Plotting
+if(flag_plotting)
+figure()
+subplot(3,1,1)
+plot_apogee_single(h,t,metric); %1 indicates: metric scale, 0: imperial
+subplot(3,1,2)
+plot_v_single(v(:,2),t,metric);
+subplot(3,1,3)
+plot_a_single(a(:,2),t,metric);
+
+figure()
+subplot(2,1,1)
+plot_FD_single(F_D,t,metric);
+subplot(2,1,2)
+plot_CD_single(C_D,t2);
+
+figure()
+subplot(2,1,1)
+plot_thrust_single(F_T,t2,metric);
+subplot(2,1,2)
+plot_mass_single(m,t,metric)
+end

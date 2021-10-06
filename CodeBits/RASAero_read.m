@@ -1,7 +1,11 @@
 %%Read in a file from RAS Aero II
 %Has to be saved as txt
 clc; clear all; close all;
+rocket_no = 2;
+addpath(['C:\Users\SeverinBeger\Documents\Uni\Master\Auslandssemester\Rocketry Club\My Code\Rockets\Rocket',num2str(rocket_no)]); %adds in the folder with necessary functions etc
+
 file = fopen("FlightTest_Data.txt");
+% file = fopen("FlightTest_Data.csv");
 numlines = 0;
 
 while(1)
@@ -24,7 +28,7 @@ line1 = fgetl(file);
 vars_l1 = CSVStringUnpack(line1);
 
 dec = zeros(1,num); %array showing the variables with a decimal
-dec(1,12:14) = 1;
+dec(1,13:14) = 1;
 dec(1,21:22) = 1;
 
 data_mat = zeros(numlines-1,num);
@@ -67,7 +71,8 @@ while(line ~= -1)
     if(counter == 449)
         dec(1,13) = 0; %random value C_P whole number
     end
-    if((length(data_line)==43)&&motor_on&&counter == 634) %motor is off
+    if(motor_on&&counter == 583) %motor is off 
+       %((length(data_line)==43)&&motor_on&&counter == 583)
         dec(1,8) = 0; %thrust only 0 from here
         motor_on = 0;
     elseif((l_data - length(data_line))==1) %altitude randomly a whole number
