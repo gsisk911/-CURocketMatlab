@@ -1,12 +1,12 @@
 %% Rocket Simulation
 %This script is a quick & dirty simulation of a rocket model
-restoredefaultpath; %to delete all added paths and avoid unnecessary conflicts with data
+%restoredefaultpath; %to delete all added paths and avoid unnecessary conflicts with data
 clc; close all; clear all;
 
 rocket_no = 2; %choose the rocket to test
 
-addpath([pwd, '\CodeBits']); %adds in the folder with necessary functions etc
-addpath([pwd, '\Rockets', '\Rocket',num2str(rocket_no)]); %adds in the folder with necessary functions etc
+%addpath([pwd, '\CodeBits']); %adds in the folder with necessary functions etc
+%addpath([pwd, '\Rockets', '\Rocket',num2str(rocket_no)]); %adds in the folder with necessary functions etc
 
 
 %% Simulation Parameters & Choices

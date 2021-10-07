@@ -47,9 +47,9 @@ m = out.SimData.m.Data(:,1);
 F_T = out.SimData.thrust.Data(:,1); %along rocket
 
 %% Other Calculations
-speed_of_sound = (gamma * R .* (h .* temp_increase + initial_temp)).^(1/2);
+Speed_Of_Sound = (gamma * R .* (h .* temp_increase + initial_temp)).^(1/2);
 
-mach_number = abs(v(:,2)./speed_of_sound);
+Mach_Number = v/Speed_Of_Sou
 %% Plotting
 if(flag_plotting)
 figure()
@@ -71,9 +71,4 @@ subplot(2,1,1)
 plot_thrust_single(F_T,t2,metric);
 subplot(2,1,2)
 plot_mass_single(m,t,metric)
-
-figure()
-subplot(4,1,1)
-plot_mach_single(mach_number, t, metric)
-
 end
