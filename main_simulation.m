@@ -3,11 +3,14 @@
 %restoredefaultpath; %to delete all added paths and avoid unnecessary conflicts with data
 clc; close all; clear all;
 
-rocket_no = 1; %choose the rocket to test
+rocket_no = 3; %choose the rocket to test
 
-addpath([pwd, '/-CURocketMatlab/CodeBits']); %adds in the folder with necessary functions etc
-addpath([pwd, '/-CURocketMatlab/Plotting']); %adds in the folder with necessary functions etc
-addpath([pwd, '/-CURocketMatlab/Rockets', '/Rocket',num2str(rocket_no)]); %adds in the folder with necessary functions etc
+% addpath([pwd, '/-CURocketMatlab/CodeBits']); %adds in the folder with necessary functions etc
+% addpath([pwd, '/-CURocketMatlab/Plotting']); %adds in the folder with necessary functions etc
+% addpath([pwd, '/-CURocketMatlab/Rockets', '/Rocket',num2str(rocket_no)]); %adds in the folder with necessary functions etc
+addpath([pwd, '/CodeBits']); %adds in the folder with necessary functions etc
+addpath([pwd, '/Plotting']); %adds in the folder with necessary functions etc
+addpath([pwd, '/Rockets', '/Rocket',num2str(rocket_no)]); %adds in the folder with necessary functions etc
 
 
 %% Simulation Parameters & Choices
@@ -17,11 +20,7 @@ flag_D = 1; %consider drag - 0: no, 1: yes with interpolation of data, 2: yes wi
 flag_analytical = 0; %if set, than drag is calculated analytical, else a RAS Aero File is loaded in
 flag_AA = 0; %consider active aero - 0: no, 1: yes
 flag_plotting = 1; %if you want to see plots in the end
-metric = 1; %if plotting is to be in metric units, 0 for imperial
-initial_temp = 29+273; %ground Temp in C
-temp_increase = -9.8/1000;
-gamma = 1.4; %ratio of specific heats
-R = 286; % (m^2/s^2/K)
+metric = 0; %if plotting is to be in metric units, 0 for imperial
 
 %% Variables
 % Call several scripts
@@ -46,10 +45,11 @@ t2 = out.SimData.C_D.Time(:,1);
 m = out.SimData.m.Data(:,1);
 F_T = out.SimData.thrust.Data(:,1); %along rocket
 
-%% Other Calculations
+%% Postprocessing: Additional Calculations
 speed_of_sound = (gamma * R .* (h .* temp_increase + initial_temp)).^(1/2);
 
 mach_number = abs(v(:,2)./speed_of_sound);
+
 %% Plotting
 if(flag_plotting)
 figure()
@@ -73,7 +73,6 @@ subplot(2,1,2)
 plot_mass_single(m,t,metric)
 
 figure()
-subplot(4,1,1)
-plot_mach_single(mach_number, t, metric)
+plot_mach_single(mach_number, t)
 
 end
