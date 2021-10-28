@@ -78,7 +78,7 @@ plot_mass_single(m,t,metric)
 
 figure()
 subplot(4,1,1)
-plot_mach_single(mach_number, t, metric)
+plot_mach_single(mach_number, t)
 subplot(4,1,2)
 plot_h_v_single(v(:,2),h,metric)
 
