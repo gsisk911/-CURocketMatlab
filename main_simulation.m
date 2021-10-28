@@ -10,6 +10,7 @@ rocket_no = 3; %choose the rocket to test
 % addpath([pwd, '/-CURocketMatlab/Rockets', '/Rocket',num2str(rocket_no)]); %adds in the folder with necessary functions etc
 addpath([pwd, '/CodeBits']); %adds in the folder with necessary functions etc
 addpath([pwd, '/Plotting']); %adds in the folder with necessary functions etc
+addpath([pwd, '/AnalyticDrag']); %adds in the folder with necessary functions etc
 addpath([pwd, '/Rockets', '/Rocket',num2str(rocket_no)]); %adds in the folder with necessary functions etc
 
 
@@ -20,7 +21,7 @@ flag_D = 1; %consider drag - 0: no, 1: yes with interpolation of data, 2: yes wi
 flag_analytical = 0; %if set, than drag is calculated analytical, else a RAS Aero File is loaded in
 flag_AA = 0; %consider active aero - 0: no, 1: yes
 flag_plotting = 1; %if you want to see plots in the end
-metric = 0; %if plotting is to be in metric units, 0 for imperial
+metric =1; %if plotting is to be in metric units, 0 for imperial
 
 %% Variables
 % Call several scripts
@@ -48,7 +49,7 @@ F_T = out.SimData.thrust.Data(:,1); %along rocket
 %% Postprocessing: Additional Calculations
 speed_of_sound = (gamma * R .* (h .* temp_increase + initial_temp)).^(1/2);
 
-mach_number = abs(v(:,2)./speed_of_sound);
+mach_number = abs(v_abs./speed_of_sound);
 
 %% Plotting
 if(flag_plotting)
@@ -76,3 +77,19 @@ figure()
 plot_mach_single(mach_number, t)
 
 end
+
+
+%% Analytic Machnumber Test
+num = length(h);
+CD_an = zeros(num,1);
+M_an = zeros(num,1);
+
+for i = 1:num
+[CD_an(i),M_an(i)] = DragCoefficient(h(i),v(i,:),l,l_b,l_nc,d,d_b,S_B,root_chord, tip_chord,S_F,LE,t_f,n_f);
+
+end
+figure
+plot(t(65:end),CD_an(65:end),'LineWidth',1);
+grid on
+xlabel("time t")
+ylabel("Drag CD")

@@ -23,11 +23,10 @@ motor_data %calls script that adds mass, force and time vector
     %Tangent Ogive
 %rocket body
     d = 6.125*in2m; %diameter of the tube
-    d_b = d; %diameter of the base where the motor sits
     r = d/2;
     l_b = 66*in2m; %length of the complete rocket
     
-    l = l_nc+l_b;
+    l = l_nc*l_b;
     
     %fins
     n_f = 4;
@@ -48,14 +47,13 @@ motor_data %calls script that adds mass, force and time vector
     % Total wetted surface area approximations
     a = (r^2 +l_nc^2)/(2*r);
     %S_B = 2 * pi * (r - a) *asin(l_nc / a) + l_nc; %Body
-%     A_nc = A_nc(l_nc,d_nc/2);
-%     S_B = A_nc + pi*d*l_b;
-    S_B = pi*d*l; %very simplified
-%     S_F = span_f/2 * (root_chord + tip_chord); %Fins, 
-    S_F = 2* (span_f*root_chord + 0.5*span_f*d_sweep + 0.5*span_f*(root_chord-d_sweep-tip_chord));
+    A_nc = A_nc(l_nc,d_nc/2);
+    S_B = A_nc + pi*d*l_b;
+    S_F = span_f/2 * (root_chord + tip_chord); %Fins, 
+    S_F = 
     
     % Area of attack
-    A_R = 1/4 * pi *d^2; %calcRocketArea(d/2,n_f,t_f,span_f);
+    A_R = calcRocketArea(d/2,n_f,t_f,span_f);
     
     %active aero - consider trapezoidal shape of fins    
     n_finAA = 4; %for total fins
