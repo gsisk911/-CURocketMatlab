@@ -3,11 +3,11 @@
 %restoredefaultpath; %to delete all added paths and avoid unnecessary conflicts with data
 clc; close all; clear all;
 
-rocket_no = 1; %choose the rocket to test
+rocket_no = 2; %choose the rocket to test
 
-addpath([pwd, '/-CURocketMatlab/CodeBits']); %adds in the folder with necessary functions etc
-addpath([pwd, '/-CURocketMatlab/Plotting']); %adds in the folder with necessary functions etc
-addpath([pwd, '/-CURocketMatlab/Rockets', '/Rocket',num2str(rocket_no)]); %adds in the folder with necessary functions etc
+%addpath([pwd, '/-CURocketMatlab/CodeBits']); %adds in the folder with necessary functions etc
+%addpath([pwd, '/-CURocketMatlab/Plotting']); %adds in the folder with necessary functions etc
+%addpath([pwd, '/-CURocketMatlab/Rockets', '/Rocket',num2str(rocket_no)]); %adds in the folder with necessary functions etc
 
 
 %% Simulation Parameters & Choices
@@ -18,7 +18,7 @@ flag_analytical = 0; %if set, than drag is calculated analytical, else a RAS Aer
 flag_AA = 0; %consider active aero - 0: no, 1: yes
 flag_plotting = 1; %if you want to see plots in the end
 metric = 1; %if plotting is to be in metric units, 0 for imperial
-initial_temp = 29+273; %ground Temp in C
+initial_temp = 29+273; %ground Temp in K
 temp_increase = -9.8/1000;
 gamma = 1.4; %ratio of specific heats
 R = 286; % (m^2/s^2/K)
@@ -75,5 +75,7 @@ plot_mass_single(m,t,metric)
 figure()
 subplot(4,1,1)
 plot_mach_single(mach_number, t, metric)
+subplot(4,1,2)
+plot_h_v_single(v(:,2),h,metric)
 
 end

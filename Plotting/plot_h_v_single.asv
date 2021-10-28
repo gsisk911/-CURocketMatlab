@@ -1,0 +1,23 @@
+function plot_h_v_single(mach,t,metric)
+
+if(~metric)
+    %ft2m = 0.3048; %feet to meters
+    %mach = mach.*(1/ft2m);
+    [max_mach,idx] = max(mach);
+    str2 = ['Maximum Mach Number ', num2str(max_mach)];
+    str = "altitude";
+else
+    [max_mach,idx] = max(mach);
+    str2 = ['altitude/v', num2str(max_mach)];
+    str = "altitude";
+end
+% figure
+plot(t,mach,'LineWidth',1)
+grid on
+xlabel("velocity")
+ylabel(str)
+title("")
+hold on
+plot(t(idx),max_mach,'rx','LineWidth',1);
+disp(str2);
+end
