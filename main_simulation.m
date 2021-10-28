@@ -3,11 +3,14 @@
 %restoredefaultpath; %to delete all added paths and avoid unnecessary conflicts with data
 clc; close all; clear all;
 
-rocket_no = 2; %choose the rocket to test
+rocket_no = 3; %choose the rocket to test
 
-%addpath([pwd, '/-CURocketMatlab/CodeBits']); %adds in the folder with necessary functions etc
-%addpath([pwd, '/-CURocketMatlab/Plotting']); %adds in the folder with necessary functions etc
-%addpath([pwd, '/-CURocketMatlab/Rockets', '/Rocket',num2str(rocket_no)]); %adds in the folder with necessary functions etc
+% addpath([pwd, '/-CURocketMatlab/CodeBits']); %adds in the folder with necessary functions etc
+% addpath([pwd, '/-CURocketMatlab/Plotting']); %adds in the folder with necessary functions etc
+% addpath([pwd, '/-CURocketMatlab/Rockets', '/Rocket',num2str(rocket_no)]); %adds in the folder with necessary functions etc
+addpath([pwd, '/CodeBits']); %adds in the folder with necessary functions etc
+addpath([pwd, '/Plotting']); %adds in the folder with necessary functions etc
+addpath([pwd, '/Rockets', '/Rocket',num2str(rocket_no)]); %adds in the folder with necessary functions etc
 
 
 %% Simulation Parameters & Choices
@@ -46,10 +49,11 @@ t2 = out.SimData.C_D.Time(:,1);
 m = out.SimData.m.Data(:,1);
 F_T = out.SimData.thrust.Data(:,1); %along rocket
 
-%% Other Calculations
+%% Postprocessing: Additional Calculations
 speed_of_sound = (gamma * R .* (h .* temp_increase + initial_temp)).^(1/2);
 
 mach_number = abs(v(:,2)./speed_of_sound);
+
 %% Plotting
 if(flag_plotting)
 figure()

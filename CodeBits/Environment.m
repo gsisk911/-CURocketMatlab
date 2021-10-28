@@ -5,3 +5,8 @@
     h_0 = 0; %starting height
     R_E = 6378136; %radius of the earth in meter
     g_0 = 9.798; %m/s^2, gravity acceleration parameter
+    
+    initial_temp = 29+273; %ground Temp in C
+    temp_increase = -9.8/1000; %degree per meter
+    gamma = 1.4; %ratio of specific heats
+    R = 286; % (m^2/s^2/K)
