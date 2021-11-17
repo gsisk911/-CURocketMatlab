@@ -14,7 +14,7 @@ if(choice == 1)
 % tStep=-1. tFix=1, fDiv=10, fStep=-1., fFix=1, mDiv=10, mStep=-1.
 %, mFix=1, cgDiv=10, cgStep=-1., cgFix=1
 
-m_P = 9.162; % Propulsionmass at t0
+m_P = 5.599; % Propulsionmass at t0
 t_BO = 4.85; %Burnout in seconds
 
 %t,, f,, m,, cg
@@ -77,7 +77,7 @@ elseif(choice==2)
 %mfg=Aerotech peakThrust=2316.16 propWt=5729. tDiv=10 tFix=1 
 %tStep=-1. throatDia=0.>
 
-m_P = 9.099; % Propulsionmass at t0
+m_P = 5.729; % Propulsionmass at t0
 t_BO = 4.7; %Burnout in seconds
 %t,, f,, m,, cg
 

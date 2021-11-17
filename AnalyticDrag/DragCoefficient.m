@@ -23,17 +23,17 @@ v = v_met./ft2m;
 v_abs = norm(v); 
 
 
-l=l/ft2m;
-l_b = l_b/ft2m;
-l_nc = l_nc/ft2m;
-d=d/ft2m;
-d_b=d_b/ft2m
-S_B = S_B/(ft2m^2);
-l_rootchord = l_rootchord/ft2m;
-l_tipchord = l_tipchord/ft2m;
-S_F = S_F/(ft2m^2);
-X_tc = X_tc/ft2m;
-t_fins = t_fins/ft2m;
+l=l/in2m;
+l_b = l_b/in2m;
+l_nc = l_nc/in2m;
+d=d/in2m;
+d_b=d_b/in2m;
+S_B = S_B/(in2m^2);
+l_rootchord = l_rootchord/in2m;
+l_tipchord = l_tipchord/in2m;
+S_F = S_F/(in2m^2);
+X_tc = X_tc/in2m;
+t_fins = t_fins/in2m;
 
 
 if(abs(v_abs) < 1e-6)
